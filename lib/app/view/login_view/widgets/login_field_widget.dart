@@ -15,6 +15,7 @@ class LoginFieldWidget extends StatelessWidget {
     this.isPassword = false,
     this.onPressed,
     required this.controller,
+    this.validator,
   });
   final String svgName;
   final String label;
@@ -22,6 +23,7 @@ class LoginFieldWidget extends StatelessWidget {
   final bool isPassword;
   final void Function()? onPressed;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     final ctrl = Get.find<LoginViewController>();
@@ -44,7 +46,8 @@ class LoginFieldWidget extends StatelessWidget {
 
                 isPassword
                     ? Obx(
-                        () => TextField(
+                        () => TextFormField(
+                          validator: validator,
                           controller: controller,
                           obscureText: ctrl.isObsecure.value,
                           style: TextStyle(
@@ -65,7 +68,8 @@ class LoginFieldWidget extends StatelessWidget {
                           ),
                         ),
                       )
-                    : TextField(
+                    : TextFormField(
+                        validator: validator,
                         controller: controller,
                         obscureText: false,
                         style: TextStyle(

@@ -10,7 +10,7 @@ class LoginViewController extends GetxController {
   RxBool isObsecure = true.obs;
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
-
+  final formKey = GlobalKey<FormState>();
   void changeObsecure() {
     isObsecure.value = !isObsecure.value;
   }

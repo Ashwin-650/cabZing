@@ -64,26 +64,39 @@ class LoginView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(11.r),
                 border: Border.all(color: AppColors.borderBlue),
               ),
-              child: Column(
-                children: [
-                  LoginFieldWidget(
-                    controller: ctrl.userName,
-                    svgName: 'user',
-                    label: "Username",
-                    hintText: 'Enter your Username ',
-                  ),
-                  Divider(color: AppColors.borderBlue),
-                  LoginFieldWidget(
-                    controller: ctrl.password,
-                    svgName: 'key',
-                    label: 'Password',
-                    hintText: "Enter your Password ",
-                    isPassword: true,
-                    onPressed: () {
-                      ctrl.changeObsecure();
-                    },
-                  ),
-                ],
+              child: Form(
+                key: ctrl.formKey,
+                child: Column(
+                  children: [
+                    LoginFieldWidget(
+                      controller: ctrl.userName,
+                      svgName: 'user',
+                      label: "Username",
+                      hintText: 'Enter your Username ',
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Email is required';
+                        return null;
+                      },
+                    ),
+                    Divider(color: AppColors.borderBlue),
+                    LoginFieldWidget(
+                      controller: ctrl.password,
+                      svgName: 'key',
+                      label: 'Password',
+                      hintText: "Enter your Password ",
+                      isPassword: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'password is required';
+                        return null;
+                      },
+                      onPressed: () {
+                        ctrl.changeObsecure();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             AppText(
@@ -98,7 +111,16 @@ class LoginView extends StatelessWidget {
                 backgroundColor: WidgetStatePropertyAll(AppColors.appBlue),
               ),
               onPressed: () {
-                ctrl.signIn();
+                if (ctrl.formKey.currentState!.validate()) {
+                  ctrl.signIn();
+                } else {
+                  Get.showSnackbar(
+                    GetSnackBar(
+                      message: 'Fill all fields',
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                }
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,
